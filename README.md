@@ -1,3 +1,7 @@
+# Requirements
+1) python
+2) thrift version 19.0
+
 # Machines tested: 
 Server: duong210@csel-kh1250-17
 Client: duong210@csel-kh1250-16
@@ -44,7 +48,7 @@ nodes equal to the total amount of jobs. The training stops when the coordinator
 python3 client.py <coordinator_ip> <coordinator_port> <dir_path> <rounds> <epochs>
 
 The design of the client is simple. First, it takes in the user inputs and use these inputs to set up a connection to the server. After that, it runs the train function
-on the server. In other words, it initiates the shared model training and prints the validation value once it is done. 
+on the server. In other words, it initiates the shared model training and prints the validation value once it is done. dir_path is the path to your training files
 
 # Test cases and performance evaluation:
 

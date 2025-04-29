@@ -28,7 +28,7 @@ class ComputeNode:
     self.mlp = ML.mlp()
     
     # Make socket to contact the server
-    transport = TSocket.TSocket("localhost", self.port)
+    transport = TSocket.TSocket("csel-kh1250-17", self.port)
 
     # Buffering is critical. Raw sockets are very slow
     transport = TTransport.TBufferedTransport(transport)
@@ -88,7 +88,7 @@ class ServerHandler:
 def start_server(port):
   handler = ServerHandler()
   processor = compute_node.Processor(handler)
-  transport = TSocket.TServerSocket("localhost", port)
+  transport = TSocket.TServerSocket("0.0.0.0", port)
   tfactory = TTransport.TBufferedTransportFactory()
   pfactory = TBinaryProtocol.TBinaryProtocolFactory()
   
@@ -114,4 +114,3 @@ if __name__ == "__main__":
   
   compute_node = ComputeNode(9090, load_probability)
   compute_node.local_train()
-  

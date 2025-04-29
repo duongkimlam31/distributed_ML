@@ -1,3 +1,4 @@
+
 import sys
 import glob
 
@@ -50,7 +51,7 @@ class CoordinatorNode:
     if injection[0] == "inject":
       delay = True
     # If use load-balancing scheduling and no task has been rejected so far
-    if self.scheduling_policy == "1" and self.rejected == 0:
+    if self.scheduling_policy == "2" and self.rejected == 0:
       # Decide whether to reject or accept a task
       choice = random.choices(["reject", "accept"], weights=[load_probability, 1 - load_probability])[0]
       # Handle each case
@@ -62,11 +63,11 @@ class CoordinatorNode:
         self.item_available.release()
         return communication_data("", [], [], -1, -1, delay)
     # Send a task to another node if a node was recently rejected
-    elif self.scheduling_policy == "1" and self.rejected == 1:
+    elif self.scheduling_policy == "2" and self.rejected == 1:
       work = self.work_queue.pop(0)
       self.rejected = 0
     # Handle random scheduling case
-    elif self.scheduling_policy == "2":
+    elif self.scheduling_policy == "1":
         work = self.work_queue.pop(0)
     self.mutex.release()
     self.space_available.release()
@@ -138,7 +139,9 @@ class CoordinatorNode:
       # You may want to print the validation error each round 
       validate = self.mlp.validate("../letters/validate_letters.txt")
       print(validate)
-      
+    
+    self.job_count = 0
+    self.job_completed = 0
     return validate
   
 def start_server():
@@ -147,7 +150,7 @@ def start_server():
   
   coordinator_node = CoordinatorNode(scheduling_policy)
   processor = coordinator.Processor(coordinator_node)
-  transport = TSocket.TServerSocket(host='localhost', port=port)
+  transport = TSocket.TServerSocket(port=port)
   
   tfactory = TTransport.TBufferedTransportFactory()
   pfactory = TBinaryProtocol.TBinaryProtocolFactory()
